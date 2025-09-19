@@ -50,7 +50,7 @@
 </body>
 </html>
  -->
- <!DOCTYPE html>
+<!--  <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -339,6 +339,548 @@
             document.getElementById('next').addEventListener('click', function() {
                 alert('Это демо-версия плеера. В реальном приложении здесь был бы следующий трек.');
             });
+        });
+    </script>
+</body>
+</html>
+ -->
+
+
+ <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аудиоплеер - Gianluca Dimeo & Daniel Santoro - Wings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+        
+        header {
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .player-container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+        
+        .album-art {
+            width: 250px;
+            height: 250px;
+            border-radius: 15px;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #2c3e50, #4ca1af);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .album-art .placeholder {
+            font-size: 80px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .song-info {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .song-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .song-artist {
+            font-size: 18px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+        
+        .progress-container {
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+        
+        .time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #ccc;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s;
+            padding: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-play {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff8a00, #da1b60);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            box-shadow: 0 5px 15px rgba(218, 27, 96, 0.4);
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .btn-play:hover {
+            transform: scale(1.1);
+        }
+        
+        .volume-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .volume-slider {
+            width: 150px;
+            -webkit-appearance: none;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            outline: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .solution {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-top: 20px;
+        }
+        
+        .solution h3 {
+            margin-bottom: 15px;
+            color: #7bed9f;
+            text-align: center;
+        }
+        
+        .option {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .option h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #ffa502;
+        }
+        
+        .option p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .code-block {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .action-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff8a00, #da1b60);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(218, 27, 96, 0.4);
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .success {
+            background: rgba(46, 213, 115, 0.2);
+            color: #7bed9f;
+        }
+        
+        .error {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+        }
+        
+        footer {
+            margin-top: 30px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Аудиоплеер</h1>
+            <p class="subtitle">Gianluca Dimeo & Daniel Santoro - Wings</p>
+        </header>
+        
+        <div class="player-container">
+            <div class="album-art">
+                <div class="placeholder">♪</div>
+            </div>
+            
+            <div class="song-info">
+                <h2 class="song-title">Wings</h2>
+                <p class="song-artist">Gianluca Dimeo & Daniel Santoro</p>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="time">
+                    <span id="current-time">0:00</span>
+                    <span id="duration">0:00</span>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn" id="prev" title="Предыдущий трек">⏮</button>
+                <button class="btn btn-play" id="play" title="Воспроизвести">▶</button>
+                <button class="btn" id="next" title="Следующий трек">⏭</button>
+            </div>
+            
+            <div class="volume-container">
+                <span class="btn">🔈</span>
+                <input type="range" class="volume-slider" id="volume" min="0" max="1" step="0.01" value="0.7" title="Громкость">
+                <span class="btn">🔊</span>
+            </div>
+            
+            <div id="status" class="status">Готов к воспроизведению</div>
+        </div>
+        
+        <div class="solution">
+            <h3>Решение проблемы с CORS на Vercel</h3>
+            
+            <div class="option">
+                <h4><span>🔧</span> Вариант 1: Использовать CORS-прокси</h4>
+                <p>Добавьте этот код в ваш JavaScript, чтобы обойти ограничения CORS:</p>
+                
+                <div class="code-block">
+// Функция для обхода CORS с помощью прокси
+function enableCorsProxy(audioUrl) {
+    // Используем публичный CORS-прокси
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    return proxyUrl + audioUrl;
+}
+
+// Использование:
+const audioElement = document.getElementById('audio-player');
+const originalUrl = 'http://185.43.6.38/.../Wings.mp3';
+audioElement.src = enableCorsProxy(originalUrl);
+                </div>
+                
+                <p>Этот код использует публичный прокси-сервер, который добавляет необходимые CORS-заголовки.</p>
+            </div>
+            
+            <div class="option">
+                <h4><span>⚙️</span> Вариант 2: Настроить API-маршрут в Vercel</h4>
+                <p>Создайте файл <code>/api/proxy.js</code> в вашем проекте:</p>
+                
+                <div class="code-block">
+export default async function handler(req, res) {
+    const { url } = req.query;
+    
+    if (!url) {
+        return res.status(400).json({ error: 'URL parameter is required' });
+    }
+    
+    try {
+        const response = await fetch(url);
+        const data = await response.arrayBuffer();
+        
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Content-Type', 'audio/mpeg');
+        res.send(Buffer.from(data));
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch audio' });
+    }
+}
+                </div>
+                
+                <p>Затем используйте этот endpoint для загрузки аудио:</p>
+                
+                <div class="code-block">
+const audioElement = document.getElementById('audio-player');
+audioElement.src = `/api/proxy?url=${encodeURIComponent('http://185.43.6.38/.../Wings.mp3')}`;
+                </div>
+            </div>
+            
+            <div class="option">
+                <h4><span>📁</span> Вариант 3: Загрузить аудио на тот же домен</h4>
+                <p>Самый надежный способ - загрузить аудиофайл непосредственно в ваш проект на Vercel.</p>
+                
+                <ol>
+                    <li>Скачайте аудиофайл на свой компьютер</li>
+                    <li>Добавьте его в папку <code>/public</code> вашего проекта</li>
+                    <li>Используйте относительный путь для загрузки:
+                        <div class="code-block">
+const audioElement = document.getElementById('audio-player');
+audioElement.src = '/Wings.mp3';
+                        </div>
+                    </li>
+                </ol>
+                
+                <a href="#" class="action-btn" onclick="testAudio()">Протестировать аудио</a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Аудиоплеер с решением для CORS на Vercel | 2023</p>
+        </footer>
+        
+        <!-- Аудио элемент -->
+        <audio id="audio-player"></audio>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('audio-player');
+            const playBtn = document.getElementById('play');
+            const progressBar = document.getElementById('progress-bar');
+            const progress = document.getElementById('progress');
+            const currentTimeEl = document.getElementById('current-time');
+            const durationEl = document.getElementById('duration');
+            const volumeSlider = document.getElementById('volume');
+            const statusEl = document.getElementById('status');
+            
+            // Функция для обхода CORS с помощью прокси
+            function enableCorsProxy(audioUrl) {
+                // Используем публичный CORS-прокси
+                const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+                return proxyUrl + audioUrl;
+            }
+            
+            // Исходный URL аудио
+            const originalUrl = 'http://185.43.6.38/hc/preview/temp_067TG/2025.09/Gianluca%20Dimeo%20%26%20Daniel%20Santoro%20-%20Wings.mp3';
+            
+            // Установка источника аудио через прокси
+            audio.src = enableCorsProxy(originalUrl);
+            statusEl.textContent = "Загрузка аудио через CORS-прокси...";
+            statusEl.className = "status";
+            
+            // Попытка загрузки аудио
+            audio.load();
+            
+            // Установка обработчика ошибок аудио
+            audio.addEventListener('error', function(e) {
+                console.error('Ошибка загрузки аудио:', e);
+                statusEl.textContent = "Ошибка загрузки аудио. Попробуйте другой метод.";
+                statusEl.className = "status error";
+            });
+            
+            audio.addEventListener('canplay', function() {
+                statusEl.textContent = "Аудио готово к воспроизведению";
+                statusEl.className = "status success";
+            });
+            
+            // Воспроизведение и пауза
+            playBtn.addEventListener('click', function() {
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        playBtn.innerHTML = '⏸';
+                        playBtn.title = "Пауза";
+                        statusEl.textContent = "Воспроизведение";
+                        statusEl.className = "status success";
+                    }).catch(error => {
+                        console.error('Ошибка воспроизведения:', error);
+                        statusEl.textContent = "Ошибка воспроизведения. Попробуйте другой метод.";
+                        statusEl.className = "status error";
+                    });
+                } else {
+                    audio.pause();
+                    playBtn.innerHTML = '▶';
+                    playBtn.title = "Воспроизвести";
+                    statusEl.textContent = "Пауза";
+                    statusEl.className = "status";
+                }
+            });
+            
+            // Обновление прогресса
+            audio.addEventListener('timeupdate', function() {
+                const currentTime = audio.currentTime;
+                const duration = audio.duration;
+                
+                // Обновление прогрессбара
+                const progressPercent = (currentTime / duration) * 100;
+                progress.style.width = `${progressPercent}%`;
+                
+                // Форматирование времени
+                const formatTime = (time) => {
+                    const minutes = Math.floor(time / 60);
+                    const seconds = Math.floor(time % 60);
+                    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                };
+                
+                currentTimeEl.textContent = formatTime(currentTime);
+                
+                if (duration) {
+                    durationEl.textContent = formatTime(duration);
+                }
+            });
+            
+            // Перемотка по клику на прогрессбар
+            progressBar.addEventListener('click', function(e) {
+                const width = this.clientWidth;
+                const clickX = e.offsetX;
+                const duration = audio.duration;
+                
+                audio.currentTime = (clickX / width) * duration;
+            });
+            
+            // Регулировка громкости
+            volumeSlider.addEventListener('input', function() {
+                audio.volume = this.value;
+            });
+            
+            // Когда аудио закончилось
+            audio.addEventListener('ended', function() {
+                playBtn.innerHTML = '▶';
+                playBtn.title = "Воспроизвести";
+                audio.currentTime = 0;
+                statusEl.textContent = "Воспроизведение завершено";
+                statusEl.className = "status";
+            });
+            
+            // Кнопки предыдущий/следующий трек (заглушки)
+            document.getElementById('prev').addEventListener('click', function() {
+                alert('Это демо-версия плеера. В реальном приложении здесь был бы предыдущий трек.');
+            });
+            
+            document.getElementById('next').addEventListener('click', function() {
+                alert('Это демо-версия плеера. В реальном приложении здесь был бы следующий трек.');
+            });
+            
+            // Глобальная функция для тестирования
+            window.testAudio = function() {
+                statusEl.textContent = "Тестирование аудио...";
+                statusEl.className = "status";
+                
+                audio.play().then(() => {
+                    setTimeout(() => {
+                        audio.pause();
+                        audio.currentTime = 0;
+                        statusEl.textContent = "Тестирование завершено: аудио работает";
+                        statusEl.className = "status success";
+                    }, 2000);
+                }).catch(error => {
+                    console.error('Ошибка тестирования:', error);
+                    statusEl.textContent = "Тестирование завершено: ошибка воспроизведения";
+                    statusEl.className = "status error";
+                });
+            };
         });
     </script>
 </body>
