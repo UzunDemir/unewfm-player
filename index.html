@@ -5,22 +5,43 @@
     <title>U new FM Player</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 100px;
-            background-color: #121212;
+            font-family: 'Arial', sans-serif;
+            background: #121212;
             color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
         }
-        audio {
-            margin-top: 20px;
-            width: 80%;
+
+        img.logo {
+            width: 200px;
+            height: auto;
+            margin-bottom: 30px;
         }
+
         h1 {
             font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        audio {
+            width: 80%;
+            max-width: 500px;
+            outline: none;
+        }
+
+        /* Optional: glowing effect for audio controls */
+        audio::-webkit-media-controls-panel {
+            background: #1e1e1e;
         }
     </style>
 </head>
 <body>
+    <img src="unew.png" alt="U new FM Logo" class="logo">
     <h1>U new FM — Now Playing</h1>
     <audio controls>
         <source src="http://185.43.6.38/hc/preview/temp_067TG/2025.09/Gianluca%20Dimeo%20%26%20Daniel%20Santoro%20-%20Wings.mp3" type="audio/mpeg">
